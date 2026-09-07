@@ -1,0 +1,66 @@
+<div class="ody-overlay">
+  <div class="ody-modal-checkout">
+    <button (click)="closeCheckout()" class="ody-close-btn">&times;</button>
+
+    <div class="ody-checkout-header">
+      <h2>Thanh Toán Đơn Hàng</h2>
+      <p>Vui lòng điền thông tin giao nhận hàng cho hệ thống ODYDDEY</p>
+    </div>
+
+    <div class="ody-checkout-grid">
+      <div class="ody-form-section">
+        <h3>Thông tin người nhận</h3>
+        
+        <div class="ody-group">
+          <label>Họ và tên *</label>
+          <input type="text" [(ngModel)]="orderInfo.name" placeholder="Nhập họ và tên...">
+        </div>
+
+        <div class="ody-group">
+          <label>Số điện thoại *</label>
+          <input type="text" [(ngModel)]="orderInfo.phone" placeholder="Nhập số điện thoại...">
+        </div>
+
+        <div class="ody-group">
+          <label>Địa chỉ giao hàng chi tiết *</label>
+          <textarea [(ngModel)]="orderInfo.address" rows="2" placeholder="Số nhà, tên đường..."></textarea>
+        </div>
+
+        <div class="ody-group">
+          <label>Phương thức thanh toán</label>
+          <select [(ngModel)]="orderInfo.paymentMethod">
+            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+            <option value="banking">Chuyển khoản ngân hàng QR</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ody-summary-section">
+        <h3>Hóa đơn của bạn</h3>
+        <div class="ody-cart-items-mini">
+          <div *ngFor="let item of cartItems" class="ody-mini-item">
+            <span>{{ item.name }} (x{{ item.quantity }})</span>
+            <span class="price">{{ (item.price * item.quantity) | number:'1.0-0' }} đ</span>
+          </div>
+        </div>
+
+        <div class="ody-total-box">
+          <div class="row">
+            <span>Tạm tính:</span>
+            <span>{{ totalPrice | number:'1.0-0' }} đ</span>
+          </div>
+          <div class="row">
+            <span>Phí vận chuyển:</span>
+            <span>30,000 đ</span>
+          </div>
+          <div class="row total">
+            <span>Tổng cộng:</span>
+            <span class="highlight">{{ (totalPrice + 30000) | number:'1.0-0' }} đ</span>
+          </div>
+        </div>
+
+        <button (click)="confirmOrder()" class="ody-pay-btn">Xác Nhận Đặt Hàng</button>
+      </div>
+    </div>
+  </div>
+</div>

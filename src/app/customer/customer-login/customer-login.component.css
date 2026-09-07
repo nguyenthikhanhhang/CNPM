@@ -1,0 +1,261 @@
+/* Lớp phủ nền mờ */
+.ody-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Khung Modal */
+.ody-modal-content {
+  background: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Nút đóng */
+.ody-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f3f4f6;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #4b5563;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.ody-close-btn:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* Icon ổ khóa */
+.ody-icon-box {
+  width: 64px;
+  height: 64px;
+  background: #f0fdf4;
+  color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+/* Tiêu đề */
+.ody-modal-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.ody-modal-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* Danh sách vai trò dạng thẻ */
+.ody-role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ody-role-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.ody-role-item:hover {
+  background: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Emoji icon trong thẻ */
+.ody-emoji {
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+  flex-shrink: 0;
+}
+
+/* Nội dung chữ trong thẻ */
+.ody-role-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ody-role-text strong {
+  font-size: 14px;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.ody-role-text span {
+  font-size: 12px;
+  color: #6b7280;
+}
+/* RESET & STYLE CHO MODAL ĐĂNG KÝ / ĐĂNG NHẬP ODYDDEY */
+.ody-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(5px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.ody-modal-content {
+  background: #ffffff !important;
+  width: 100% !important;
+  max-width: 420px !important;
+  padding: 30px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important;
+  position: relative !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+.ody-close-btn {
+  position: absolute !important;
+  top: 15px !important;
+  right: 15px !important;
+  background: #f3f4f6 !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  color: #4b5563 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ody-icon-box {
+  width: 60px !important;
+  height: 60px !important;
+  background: #f0fdf4 !important;
+  color: #10b981 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 15px auto !important;
+}
+
+.ody-modal-header h2 {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  margin: 0 0 5px 0 !important;
+}
+
+.ody-modal-header p {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  margin: 0 0 20px 0 !important;
+}
+
+.ody-role-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.ody-role-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: all 0.2s ease !important;
+}
+
+.ody-role-item:hover {
+  background: #ffffff !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+.ody-emoji {
+  font-size: 22px !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 12px !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+  flex-shrink: 0 !important;
+}
+
+.ody-role-text {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ody-role-text strong {
+  font-size: 14px !important;
+  color: #1f2937 !important;
+  margin-bottom: 2px !important;
+}
+
+.ody-role-text span {
+  font-size: 12px !important;
+  color: #6b7280 !important;
+}

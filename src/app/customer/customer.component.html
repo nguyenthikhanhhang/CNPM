@@ -1,0 +1,136 @@
+<div class="customer-container">
+  <header class="header">
+    <div class="logo">ODYDDEY MENSWEAR</div>
+    <nav class="nav-links">
+      <a href="#" class="active">Trang Chủ</a>
+      <a href="#products-list">Sản Phẩm</a>
+      <a href="#">Bộ Sưu Tập</a>
+    </nav>
+    <div class="header-actions">
+      <button *ngIf="currentUser" class="btn-orders" (click)="openOrdersModal()" style="margin-right: 10px; background: #334155; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        📦 Đơn Hàng Của Tôi
+      </button>
+      <button class="btn-login" (click)="openAuthModal()">
+        👤 {{ currentUser ? currentUser.name : 'Đăng Nhập / Đăng Ký' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="collection-tag">COLLECTION 2026</span>
+      <h1>ODYDDEY MENSWEAR</h1>
+      <p>Phong cách thời trang nam hiện đại, tối giản & đẳng cấp</p>
+      <button class="btn-explore" onclick="document.getElementById('products-section').scrollIntoView({behavior: 'smooth'})">Khám Phá Ngay</button>
+    </div>
+  </section>
+
+  <section class="filter-section" id="products-section">
+    <h2>BỘ SƯU TẬP & DANH MỤC</h2>
+    <p class="section-desc">Chọn danh mục sản phẩm bạn muốn khám phá</p>
+    <div class="categories-nav">
+      <button 
+        *ngFor="let cat of categories" 
+        [class.active]="selectedCategory === cat"
+        (click)="filterCategory(cat)">
+        {{ cat }}
+      </button>
+    </div>
+  </section>
+
+  <main class="products-container" id="products-list">
+    <h2 class="section-title">SẢN PHẨM NỔI BẬT</h2>
+    <p class="section-subtitle">Những thiết kế mới nhất vừa đáp bến tại ODYDDEY</p>
+    
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let p of filteredProducts">
+        <div class="img-container">
+          <img [src]="p.image" alt="{{ p.title }}">
+          <span class="category-tag">{{ p.category }}</span>
+        </div>
+        <div class="product-info">
+          <h3>{{ p.title }}</h3>
+          <p class="product-price">{{ p.price | number:'1.0-0' }} đ</p>
+          <button class="btn-add-cart" (click)="addToCart(p)">+ Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="floating-cart-btn" (click)="toggleCart()">
+    🛒 Giỏ Hàng <span class="cart-badge">{{ cart.length }}</span>
+  </div>
+
+  <div class="cart-drawer" [class.open]="isCartOpen">
+    <div class="cart-header">
+      <h2>Giỏ hàng của bạn</h2>
+      <button class="close-cart" (click)="toggleCart()">×</button>
+    </div>
+
+    <div class="cart-body">
+      <p *ngIf="cart.length === 0" class="empty-msg">Giỏ hàng của bạn đang trống.</p>
+      
+      <div class="cart-item" *ngFor="let item of cart; let i = index">
+        <img [src]="item.product.image" alt="Item">
+        <div class="cart-item-details">
+          <h4>{{ item.product.title }}</h4>
+          <p>{{ item.product.price | number:'1.0-0' }} đ x {{ item.quantity }}</p>
+        </div>
+        <button class="btn-remove" (click)="removeFromCart(i)">🗑</button>
+      </div>
+    </div>
+
+    <div class="cart-footer" *ngIf="cart.length > 0">
+      <div class="total-row">
+        <span>Tổng cộng:</span>
+        <strong>{{ cartTotal | number:'1.0-0' }} đ</strong>
+      </div>
+      <button class="btn-checkout" (click)="checkout()">Thanh toán ngay</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showAuthModal" (click)="closeAuthModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeAuthModal()">×</button>
+      <app-customer-login (loginSuccess)="onLoginSuccess($event)"></app-customer-login>
+    </div>
+  </div>
+
+  <!-- Modal Lịch sử đơn hàng -->
+  <div class="ody-overlay" *ngIf="showOrdersModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 99999;">
+    <div class="ody-modal-content" style="background: white; width: 600px; max-width: 90%; padding: 24px; border-radius: 12px; position: relative;">
+      <button (click)="closeOrdersModal()" style="position: absolute; top: 12px; right: 16px; border: none; background: none; font-size: 20px; cursor: pointer;">&times;</button>
+      
+      <h2 style="margin-top: 0; font-size: 20px; color: #1e293b;">Lịch Sử Đơn Hàng Đã Mua</h2>
+      
+      <div *ngIf="ordersList.length === 0" style="text-align: center; color: #64748b; padding: 20px 0;">
+        Bạn chưa có đơn hàng nào.
+      </div>
+
+      <div style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+        <div *ngFor="let ord of ordersList" style="border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; background: #f8fafc;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #0f172a; margin-bottom: 6px;">
+            <span>Ngày đặt: {{ ord.date | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span style="color: #ef4444;">Tổng: {{ ord.total | number:'1.0-0' }} đ</span>
+          </div>
+          <div style="font-size: 12px; color: #475569; margin-bottom: 6px;">
+            Người nhận: <b>{{ ord.customer.name }}</b> - SĐT: {{ ord.customer.phone }} - Địa chỉ: {{ ord.customer.address }}
+          </div>
+          <div style="border-top: 1px dashed #cbd5e1; padding-top: 6px; font-size: 12px; color: #334155;">
+            <div *ngFor="let itm of ord.items">
+              • {{ itm.name }} (x{{ itm.quantity }})
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-checkout 
+    *ngIf="showCheckoutModal" 
+    [cartItems]="cart.map(item => ({ name: item.product.title, price: item.product.price, quantity: item.quantity }))" 
+    [totalPrice]="cartTotal"
+    (close)="showCheckoutModal = false"
+    (orderSubmitted)="onOrderSuccess($event)">
+  </app-checkout>
+</div>

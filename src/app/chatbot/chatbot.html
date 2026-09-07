@@ -1,0 +1,27 @@
+<div class="chatbot-wrapper">
+  <button class="chat-toggle" (click)="toggleChat()">
+    💬 Tư vấn ODYDDEY AI
+  </button>
+
+  <div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+      <span>Trợ lý ODYDDEY AI</span>
+      <button class="close-btn" (click)="toggleChat()">✕</button>
+    </div>
+
+    <div class="chat-body">
+      <div *ngFor="let m of messages" [class]="'chat-msg ' + m.sender">
+        <div class="bubble">{{ m.text }}</div>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <input 
+        [(ngModel)]="userText" 
+        (keyup.enter)="sendMessage()" 
+        placeholder="Nhập tư vấn size, đơn hàng..." 
+      />
+      <button (click)="sendMessage()">Gửi</button>
+    </div>
+  </div>
+</div>
