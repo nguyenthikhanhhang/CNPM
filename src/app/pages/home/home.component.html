@@ -1,0 +1,67 @@
+<section style="text-align: center; padding: 2.5rem 1rem; background: #f8f9fa;">
+  <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">COLLECTION ODYSSEY</h1>
+  <p style="color: #666;">Thời trang đường phố cao cấp</p>
+  
+  <div style="max-width: 500px; margin: 1.5rem auto 0;">
+    <input 
+      type="text" 
+      [(ngModel)]="searchQuery" 
+      placeholder="Tìm kiếm sản phẩm (vd: Hoodie, Tee, Jeans...)..." 
+      style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"
+    />
+  </div>
+</section>
+
+<section style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+  <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap;">
+    @for (cat of productService.categories(); track cat) {
+      <button 
+        (click)="selectCategory(cat)"
+        [style.background]="selectedCategory() === cat ? '#000' : '#fff'"
+        [style.color]="selectedCategory() === cat ? '#fff' : '#000'"
+        style="padding: 8px 18px; border: 1px solid #000; border-radius: 20px; cursor: pointer; font-weight: 500; transition: all 0.2s;"
+      >
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  @if (filteredProducts().length === 0) {
+    <p style="text-align: center; color: #888; margin: 3rem 0;">Không tìm thấy sản phẩm phù hợp.</p>
+  } @else {
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+      @for (item of filteredProducts(); track item.id) {
+        <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+          <div>
+            <img [src]="item.image" [alt]="item.name" style="width: 100%; height: 260px; object-fit: cover; border-radius: 6px;">
+            <span style="display: inline-block; margin-top: 10px; font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">{{ item.category }}</span>
+            <h3 style="margin: 5px 0; font-size: 1rem;">{{ item.name }}</h3>
+            <p style="color: #000; font-weight: bold; margin-bottom: 10px;">{{ item.price | currency:'VND':'symbol':'1.0-0' }}</p>
+            
+            <!-- Chọn Size -->
+            @if (item.sizes && item.sizes.length > 0) {
+              <div style="margin-bottom: 12px;">
+                <span style="font-size: 0.8rem; color: #555; display: block; margin-bottom: 4px;">Chọn Size:</span>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  @for (sz of item.sizes; track sz) {
+                    <button 
+                      (click)="selectSize(item.id, sz)"
+                      [style.background]="(selectedSizes()[item.id] || item.sizes[0]) === sz ? '#000' : '#f0f0f0'"
+                      [style.color]="(selectedSizes()[item.id] || item.sizes[0]) === sz ? '#fff' : '#000'"
+                      style="border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-weight: bold;"
+                    >
+                      {{ sz }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          <button (click)="addToCart(item)" style="background: #000; color: #fff; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 8px;">
+            Thêm vào giỏ
+          </button>
+        </div>
+      }
+    </div>
+  }
+</section>
