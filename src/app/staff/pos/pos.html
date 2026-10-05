@@ -1,0 +1,15 @@
+<p>pos works!</p>
+<h3>Màn hình Bán Hàng (POS)</h3>
+
+@if (isLoading) {
+  <p>⏳ Đang tải dữ liệu sản phẩm...</p>
+} @else {
+  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    @for (item of products; track item.id) {
+      <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; min-width: 150px;">
+        <h4>{{ item.name }}</h4>
+        <p>Giá: {{ item.price | currency:'VND' }}</p>
+      </div>
+    }
+  </div>
+}

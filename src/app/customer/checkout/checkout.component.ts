@@ -23,6 +23,20 @@ export class CheckoutComponent {
     paymentMethod: 'cod'
   };
 
+  // Biến nội dung chuyển khoản ngẫu nhiên
+  transferContent: string = 'ODY ' + Math.floor(100000 + Math.random() * 900000);
+
+  // Hàm tạo đường dẫn VietQR tự động theo tổng tiền (tổng tiền hàng + phí ship 30k)
+  getVietQRUrl(): string {
+    const bankId = 'MB'; // Mã ngân hàng của bạn
+    const accountNo = '0987654321'; // Số tài khoản nhận tiền của bạn
+    const template = 'compact2';
+    const amount = this.totalPrice + 30000; 
+    const description = encodeURIComponent(this.transferContent);
+    
+    return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${amount}&addInfo=${description}&accountName=ODYDDEY%20MENSWEAR`;
+  }
+
   closeCheckout() {
     this.close.emit();
   }

@@ -1,43 +1,97 @@
-<div class="ody-modal-overlay">
-  <div class="ody-modal-content">
-    <button class="ody-close-btn">&times;</button>
+<div class="ody-modal-overlay" (click)="cancel()">
+  <div class="ody-modal-content" (click)="$event.stopPropagation()">
+    
+    <!-- Nút đóng (X) ở góc trên -->
+    <button type="button" class="ody-close-btn" (click)="cancel()" title="Đóng">&times;</button>
 
-    <div class="ody-icon-box">
-      <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2" fill="none">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg>
+    <!-- BƯỚC 1: CHỌN VAI TRÒ -->
+    <div *ngIf="step === 'select-role'">
+      <div class="ody-icon-box">
+        <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2" fill="none">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+
+      <div class="ody-modal-header">
+        <h2>Cổng Đăng Nhập</h2>
+        <p>Chọn vai trò hệ thống ODYDDEY để tiếp tục</p>
+      </div>
+
+      <div class="ody-role-list">
+        <div class="ody-role-item" (click)="chooseRole('customer')">
+          <span class="ody-emoji">🛍️</span>
+          <div class="ody-role-text">
+            <strong>Khách Hàng</strong>
+            <span>Mua sắm, xem đơn hàng và tích điểm</span>
+          </div>
+        </div>
+
+        <div class="ody-role-item" (click)="chooseRole('staff')">
+          <span class="ody-emoji">👨‍💼</span>
+          <div class="ody-role-text">
+            <strong>Nhân Viên Bán Hàng</strong>
+            <span>Đăng nhập tài khoản do Admin cấp</span>
+          </div>
+        </div>
+
+        <div class="ody-role-item" (click)="chooseRole('admin')">
+          <span class="ody-emoji">⚙️</span>
+          <div class="ody-role-text">
+            <strong>Quản Trị Viên (Admin)</strong>
+            <span>Quản trị toàn bộ hệ thống cửa hàng</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="ody-modal-header">
-      <h2>Đăng Ký / Đăng Nhập</h2>
-      <p>Chọn vai trò hệ thống ODYDDEY để tiếp tục</p>
-    </div>
-
-    <div class="ody-role-list">
-      <div class="ody-role-item">
-        <span class="ody-emoji">🛍️</span>
-        <div class="ody-role-text">
-          <strong>Khách Hàng</strong>
-          <span>Mua sắm, xem đơn hàng và tích điểm</span>
+    <!-- BƯỚC 2: FORM ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div *ngIf="step === 'login-form'">
+      <div class="ody-form-header">
+        <button type="button" (click)="step = 'select-role'" class="ody-back-btn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div>
+          <h3 style="margin: 0; font-size: 18px; text-align: left;">{{ isRegisterMode ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập' }}</h3>
+          <span class="ody-role-tag">Vai trò: {{ roleName }}</span>
         </div>
       </div>
 
-      <div class="ody-role-item">
-        <span class="ody-emoji">👨‍💼</span>
-        <div class="ody-role-text">
-          <strong>Nhân Viên Bán Hàng</strong>
-          <span>Hỗ trợ khách hàng và xử lý đơn</span>
+      <div class="ody-form-body">
+        <div class="ody-input-group">
+          <label>Tên đăng nhập hoặc Email</label>
+          <input type="text" [(ngModel)]="username" placeholder="Nhập tài khoản của bạn...">
         </div>
-      </div>
 
-      <div class="ody-role-item">
-        <span class="ody-emoji">⚙️</span>
-        <div class="ody-role-text">
-          <strong>Quản Trị Viên (Admin)</strong>
-          <span>Quản lý toàn bộ hệ thống cửa hàng</span>
+        <div class="ody-input-group">
+          <label>Mật khẩu</label>
+          <input type="password" [(ngModel)]="password" placeholder="••••••••">
+        </div>
+
+        <button type="button" (click)="submitForm()" class="ody-submit-btn">
+          {{ isRegisterMode ? 'Hoàn Tất Đăng Ký' : 'Đăng Nhập Hệ Thống' }}
+        </button>
+
+        <!-- Chuyển đổi Đăng nhập / Đăng ký cho Khách Hàng -->
+        <div class="ody-switch-mode" *ngIf="role === 'customer'">
+          <p>
+            {{ isRegisterMode ? 'Đã có tài khoản hệ thống?' : 'Bạn chưa có tài khoản?' }}
+            <span (click)="isRegisterMode = !isRegisterMode" class="link">
+              {{ isRegisterMode ? 'Đăng nhập ngay' : 'Đăng ký tại đây' }}
+            </span>
+          </p>
+        </div>
+        
+        <!-- Thông báo cho Staff & Admin -->
+        <div class="ody-switch-mode" *ngIf="role !== 'customer'">
+          <p style="color: #64748b; font-size: 12px;">
+            * Tài khoản Nhân viên và Admin được quản lý trực tiếp bởi hệ thống.
+          </p>
         </div>
       </div>
     </div>
+
   </div>
 </div>

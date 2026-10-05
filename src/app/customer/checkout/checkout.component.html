@@ -33,6 +33,20 @@
             <option value="banking">Chuyển khoản ngân hàng QR</option>
           </select>
         </div>
+
+        <!-- KHUNG HIỆN MÃ QR KHI CHỌN CHUYỂN KHOẢN (Đã đồng bộ với orderInfo.paymentMethod) -->
+        <div *ngIf="orderInfo.paymentMethod === 'banking'" class="text-center p-3 border rounded bg-light mb-3" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6; text-align: center; margin-top: 15px;">
+          <p class="mb-2 font-weight-bold text-danger" style="color: #dc3545; font-weight: bold; margin-bottom: 8px;">Quét mã QR để thanh toán</p>
+          
+          <!-- Hiển thị ảnh QR lấy từ VietQR API -->
+          <img [src]="getVietQRUrl()" alt="VietQR" class="img-fluid mb-2" style="max-width: 220px; height: auto; display: block; margin: 0 auto 10px auto;" />
+          
+          <div class="small text-muted text-start" style="font-size: 13px; text-align: left;">
+            <p class="mb-1" style="margin-bottom: 4px;">Số tiền: <b class="text-dark">{{ (totalPrice + 30000) | number:'1.0-0' }} đ</b></p>
+            <p class="mb-1" style="margin-bottom: 4px;">Nội dung chuyển khoản: <b class="text-primary">{{ transferContent }}</b></p>
+            <p class="mb-0 text-danger font-italic" style="color: #dc3545; font-style: italic; font-size: 12px;">*Lưu ý: Vui lòng giữ nguyên nội dung chuyển khoản để hệ thống tự động xác nhận đơn hàng.</p>
+          </div>
+        </div>
       </div>
 
       <div class="ody-summary-section">
