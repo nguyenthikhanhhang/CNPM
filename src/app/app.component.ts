@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomerComponent } from './customer/customer.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
-import { Database } from './services/database';
 
 @Component({
   selector: 'app-root',
@@ -35,14 +34,8 @@ export class AppComponent implements OnInit {
   title = '24ct1-nguyen-thi-khanh-hang';
   currentUser: any = null;
 
-  constructor(private dbService: Database) {}
-
   ngOnInit() {
     this.checkUserSession();
-
-    // Gọi trực tiếp DatabaseService để GitDiagram quét được luồng đọc dữ liệu
-    const products = this.dbService.getProducts();
-    console.log('Database Loaded:', products);
   }
 
   checkUserSession() {
