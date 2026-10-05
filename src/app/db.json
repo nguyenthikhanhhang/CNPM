@@ -1,0 +1,12 @@
+{
+  "products": [
+    { "id": "1", "name": "Áo Sơ Mi Nam", "price": 350000 },
+    { "id": "2", "name": "Quần Jeans Slimfit", "price": 450000 }
+  ],
+  "orders": [
+    { "id": "101", "totalAmount": 800000, "status": "completed", "createdAt": "2026-10-05" }
+  ],
+  "users": [
+    { "id": "1", "username": "odyddey1", "role": "staff" }
+  ]
+}

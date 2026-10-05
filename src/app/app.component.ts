@@ -18,7 +18,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
       <button (click)="logout()" class="btn-logout">Đăng Xuất</button>
     </div>
 
-    <!-- 3. Giao diện TRANG CHỦ MUA SẮM CỦA KHÁCH HÀNG (Mặc định hiển thị khi mới vào) -->
+    <!-- 3. Giao diện TRANG CHỦ MUA SẮM CỦA KHÁCH HÀNG (Mặc định hiển thị khi chưa đăng nhập hoặc đăng xuất) -->
     <app-customer *ngIf="!currentUser || currentUser.role === 'customer'"></app-customer>
   `,
   styles: [`
@@ -39,13 +39,11 @@ export class AppComponent implements OnInit {
   }
 
   checkUserSession() {
-    // Ưu tiên đọc từ sessionStorage (khớp với CustomerLoginComponent)
     const savedUser = sessionStorage.getItem('ody_current_user') || localStorage.getItem('ody_current_user');
     
     if (savedUser) {
       try {
         const parsed = JSON.parse(savedUser);
-        // Chỉ nhận nếu tài khoản thực sự đã qua đăng nhập
         if (parsed && parsed.username) {
           this.currentUser = parsed;
           return;
@@ -55,8 +53,6 @@ export class AppComponent implements OnInit {
       }
     }
     
-    // Nếu chưa đăng nhập: Để currentUser = null để khách hàng mua sắm dưới dạng khách
-    // Không tự động setItem vào storage nữa để tránh dính dữ liệu cũ
     this.currentUser = null;
   }
 

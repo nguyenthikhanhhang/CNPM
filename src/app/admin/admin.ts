@@ -74,6 +74,13 @@ export class AdminComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['/']);
+    // Xóa thông tin đăng nhập trong cả sessionStorage và localStorage
+    sessionStorage.removeItem('ody_current_user');
+    localStorage.removeItem('ody_current_user');
+    
+    // Điều hướng về trang chủ và làm mới trạng thái
+    this.router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
   }
 }
