@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomerComponent } from './customer/customer.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
+import { DatabaseService } from './services/database.service';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,9 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 export class AppComponent implements OnInit {
   title = '24ct1-nguyen-thi-khanh-hang';
   currentUser: any = null;
+
+  // Inject DatabaseService vào Constructor để GitDiagram quét được liên kết phụ thuộc
+  constructor(private dbService: DatabaseService) {}
 
   ngOnInit() {
     this.checkUserSession();
