@@ -1,1 +1,24 @@
-<p>products works!</p>
+<div style="padding: 10px; max-width: 600px;">
+  <h3>➕ Thêm Sản Phẩm Mới Vào Hệ Thống</h3>
+
+  <form (submit)="addProduct($event)" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+    <div>
+      <label>Tên sản phẩm:</label><br>
+      <input type="text" [(ngModel)]="newProduct.name" name="name" required style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <div>
+      <label>Giá tiền (VND):</label><br>
+      <input type="number" [(ngModel)]="newProduct.price" name="price" required style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <div>
+      <label>Số lượng tồn kho:</label><br>
+      <input type="number" [(ngModel)]="newProduct.stock" name="stock" required style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <button type="submit" style="background: #007bff; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
+      💾 Lưu Sản Phẩm Mới
+    </button>
+  </form>
+</div>

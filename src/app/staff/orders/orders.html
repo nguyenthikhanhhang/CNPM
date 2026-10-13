@@ -1,1 +1,42 @@
-<p>orders works!</p>
+<div style="padding: 10px;">
+  <h3>📦 Danh Sách Đơn Hàng Cần Xử Lý</h3>
+
+  @if (isLoading) {
+    <p>⏳ Đang tải danh sách đơn hàng...</p>
+  } @else {
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th>Mã Đơn</th>
+          <th>Khách Hàng</th>
+          <th>Tổng Tiền</th>
+          <th>Trạng Thái</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders; track order.id) {
+          <tr>
+            <td>#{{ order.id }}</td>
+            <td>{{ order.customerName }}</td>
+            <td>{{ order.totalPrice | currency:'VND' }}</td>
+            <td>
+              <span [style.color]="order.status === 'PENDING' ? 'orange' : 'green'">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>
+              @if (order.status === 'PENDING') {
+                <button (click)="approveOrder(order.id)" style="background: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">
+                  ✔️ Duyệt đơn
+                </button>
+              } @else {
+                <span style="color: gray;">Đã duyệt</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

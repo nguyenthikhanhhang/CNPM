@@ -62,12 +62,12 @@
       <div class="ody-form-body">
         <div class="ody-input-group">
           <label>Tên đăng nhập hoặc Email</label>
-          <input type="text" [(ngModel)]="username" placeholder="Nhập tài khoản của bạn...">
+          <input type="text" [(ngModel)]="username" name="username" placeholder="Nhập tài khoản của bạn...">
         </div>
 
         <div class="ody-input-group">
           <label>Mật khẩu</label>
-          <input type="password" [(ngModel)]="password" placeholder="••••••••">
+          <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••">
         </div>
 
         <button type="button" (click)="submitForm()" class="ody-submit-btn">

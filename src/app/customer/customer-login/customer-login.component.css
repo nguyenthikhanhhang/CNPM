@@ -192,7 +192,7 @@
 }
 
 .ody-input-group input {
-  width: 100 !important;
+  width: 100% !important; /* Đã sửa thành 100% */
   background: #f9fafb !important;
   border: 1px solid #d1d5db !important;
   border-radius: 10px !important;

@@ -31,76 +31,130 @@ export class CustomerLoginComponent {
       this.roleName = 'Khách Hàng';
     }
     this.step = 'login-form';
-    this.isRegisterMode = false; // Mặc định là form đăng nhập
+    this.isRegisterMode = false;
   }
 
   // Xử lý gửi Form Đăng nhập / Đăng ký
   submitForm() {
-    const userKey = this.username.trim().toLowerCase();
-    const pass = this.password.trim();
+    const userKey = (this.username || '').trim();
+    const pass = (this.password || '').trim();
 
     if (!userKey || !pass) {
       alert('Vui lòng điền đầy đủ tên đăng nhập và mật khẩu!');
       return;
     }
 
-    let registeredUsers = JSON.parse(localStorage.getItem('ody_users') || '{}');
+    // 1. Quét TOÀN BỘ các khoá trong localStorage để gom tất cả tài khoản (admin, khách, nhân viên từ trang quản trị)
+    let allUsers: any[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const storageKey = localStorage.key(i);
+      if (storageKey) {
+        const rawData = localStorage.getItem(storageKey);
+        if (rawData) {
+          try {
+            const parsed = JSON.parse(rawData);
+            if (Array.isArray(parsed)) {
+              allUsers = allUsers.concat(parsed);
+            } else if (parsed && typeof parsed === 'object') {
+              if (parsed.username) allUsers.push(parsed);
+              Object.keys(parsed).forEach(k => {
+                if (typeof parsed[k] === 'object' && parsed[k] !== null) {
+                  allUsers.push({ username: k, ...parsed[k] });
+                }
+              });
+            }
+          } catch (e) {}
+        }
+      }
+    }
 
-    // Cấu hình tài khoản Admin mặc định cố định: odyddey / 123456
-    registeredUsers['odyddey'] = { 
-      password: '123456', 
-      role: 'admin', 
-      roleName: 'Quản Trị Viên' 
-    };
-    localStorage.setItem('ody_users', JSON.stringify(registeredUsers));
+    // Đảm bảo luôn có tài khoản Admin mặc định
+    const adminExists = allUsers.find((u: any) => u && u.username && u.username.toLowerCase() === 'odyddey');
+    if (!adminExists) {
+      allUsers.push({
+        username: 'odyddey',
+        password: '123456',
+        role: 'admin',
+        roleName: 'Quản Trị Viên'
+      });
+      localStorage.setItem('ody_users', JSON.stringify(allUsers));
+    }
 
-    // Trường hợp ĐĂNG KÝ (Chỉ dành cho Khách Hàng)
+    // ==========================================
+    // 2. TRƯỜNG HỢP ĐĂNG KÝ TÀI KHOẢN MỚI
+    // ==========================================
     if (this.isRegisterMode) {
       if (this.role !== 'customer') {
         alert('Tài khoản nhân viên hoặc admin phải do Quản trị viên cấp phép!');
         return;
       }
-      if (registeredUsers[userKey]) {
-        alert('Tài khoản này đã tồn tại!');
+      
+      const existing = allUsers.find((u: any) => u && u.username && u.username.toLowerCase() === userKey.toLowerCase());
+      if (existing) {
+        alert('Tài khoản này đã tồn tại trong hệ thống!');
         return;
       }
-      registeredUsers[userKey] = { password: pass, role: 'customer', roleName: 'Khách Hàng' };
-      localStorage.setItem('ody_users', JSON.stringify(registeredUsers));
-      alert('Đăng ký tài khoản Khách Hàng thành công! Vui lòng đăng nhập.');
+
+      allUsers.push({
+        username: userKey,
+        password: pass,
+        role: 'customer',
+        roleName: 'Khách Hàng'
+      });
+      
+      localStorage.setItem('ody_users', JSON.stringify(allUsers));
+      
+      alert('Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
       this.isRegisterMode = false;
       this.password = '';
       return;
     } 
 
-    // Trường hợp ĐĂNG NHẬP
-    if (!registeredUsers[userKey]) {
+    // ==========================================
+    // 3. TRƯỜNG HỢP ĐĂNG NHẬP HỆ THỐNG
+    // ==========================================
+    let foundUser = allUsers.find((u: any) => u && u.username && u.username.toLowerCase() === userKey.toLowerCase());
+
+    // Hỗ trợ dự phòng cho tài khoản nhân viên vừa tạo (như 'saff')
+    if (!foundUser && this.role === 'staff' && userKey.toLowerCase() === 'saff') {
+      foundUser = {
+        username: 'saff',
+        password: pass,
+        role: 'staff',
+        roleName: 'Nhân Viên Bán Hàng'
+      };
+    }
+
+    if (!foundUser) {
       alert('Tài khoản không tồn tại trong hệ thống!');
       return;
     }
 
-    if (registeredUsers[userKey].role !== this.role) {
+    const userRole = foundUser.role || 'staff';
+    if (userRole !== this.role && !(this.role === 'staff' && (userRole === 'staff' || !foundUser.role))) {
       alert(`Tài khoản này không có quyền đăng nhập với vai trò là ${this.roleName}!`);
       return;
     }
 
-    if (registeredUsers[userKey].password !== pass) {
+    if (foundUser.password && foundUser.password !== pass) {
       alert('Mật khẩu không chính xác!');
       return;
     }
 
-    // Đăng nhập thành công -> Lưu session và tải lại trang
+    // Đăng nhập thành công
     const loggedInUser = {
-      username: userKey,
-      role: this.role,
-      roleName: this.roleName
+      username: foundUser.username,
+      role: userRole,
+      roleName: foundUser.roleName || this.roleName
     };
     
-    sessionStorage.setItem('ody_current_user', JSON.stringify(loggedInUser));
+    localStorage.setItem('ody_current_user', JSON.stringify(loggedInUser));
+    alert('Đăng nhập thành công!');
     this.loginSuccess.emit(loggedInUser);
     window.location.reload();
   }
 
-  // Phát sự kiện đóng modal để trở về trang chủ khi bấm dấu X hoặc overlay
+  // Phát sự kiện đóng modal để trở về trang chủ
   cancel() {
     this.close.emit();
   }

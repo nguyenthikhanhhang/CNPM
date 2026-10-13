@@ -2,16 +2,16 @@
   <h2>Trang Làm Việc Của Nhân Viên Bán Hàng</h2>
   <p>Xin chào nhân viên: <strong>odyddey1</strong></p>
 
-  <!-- Menu chuyển trang con -->
-  <nav style="margin: 15px 0; display: flex; gap: 15px;">
-    <a routerLink="pos">Bán hàng (POS)</a> |
-    <a routerLink="orders">Đơn hàng</a> |
-    <a routerLink="products">Sản phẩm</a> |
-    <a routerLink="customers">Khách hàng</a>
+  <!-- Menu chuyển trang con (BẮT BUỘC PHẢI CÓ ĐOẠN NÀY) -->
+  <nav style="margin: 15px 0; display: flex; gap: 15px; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+    <a routerLink="pos" style="text-decoration: none; color: #007bff; font-weight: bold;">🛒 Bán hàng (POS)</a> |
+    <a routerLink="orders" style="text-decoration: none; color: #007bff; font-weight: bold;">📦 Xem & Duyệt Đơn Hàng</a> |
+    <a routerLink="products" style="text-decoration: none; color: #007bff; font-weight: bold;">➕ Thêm Sản Phẩm</a> |
+    <a routerLink="customers" style="text-decoration: none; color: #007bff; font-weight: bold;">👥 Khách hàng</a>
   </nav>
 
   <hr />
 
-  <!-- Nơi hiển thị nội dung của pos / orders / products / customers -->
+  <!-- Nơi hiển thị nội dung các trang con (BẮT BUỘC PHẢI CÓ THẺ NÀY ĐỂ RENDER POS/ORDERS/PRODUCTS) -->
   <router-outlet></router-outlet>
 </div>

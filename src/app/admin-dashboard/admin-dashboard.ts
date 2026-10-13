@@ -197,8 +197,45 @@ export class AdminDashboardComponent {
     this.updateStaffCount();
   }
 
-  logout() {
-    localStorage.removeItem('ody_current_user');
-    window.location.reload();
+  // Trong AdminDashboardComponent
+logout() {
+  // Xóa sạch thông tin đăng nhập khỏi bộ nhớ tạm
+  localStorage.removeItem('ody_current_user');
+  sessionStorage.removeItem('ody_current_user');
+  
+  // Tải lại trang để ứng dụng quay về Trang chủ Khách hàng
+  window.location.reload();
+}
+  // Trong AdminDashboardComponent khi cấp tài khoản mới:
+onCaphhânVien(usernameInput: string, passwordInput: string) {
+  if (!usernameInput || !passwordInput) {
+    alert('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!');
+    return;
   }
+
+  // 1. Lấy danh sách tài khoản hiện có từ localStorage (dùng chung key 'ody_users')
+  const users = JSON.parse(localStorage.getItem('ody_users') || '[]');
+
+  // 2. Kiểm tra xem username đã tồn tại chưa
+  const existingUser = users.find((u: any) => u.username === usernameInput);
+  if (existingUser) {
+    alert('Tên đăng nhập này đã tồn tại trong hệ thống!');
+    return;
+  }
+
+  // 3. Thêm tài khoản mới với role bắt buộc là 'staff'
+  users.push({
+    username: usernameInput,
+    password: passwordInput,
+    role: 'staff'
+  });
+
+  // 4. Lưu ngược lại vào localStorage
+  localStorage.setItem('ody_users', JSON.stringify(users));
+  
+  alert(`Cấp thành công tài khoản nhân viên: ${usernameInput}`);
+  
+  // Reset form input nếu cần
+}
+
 }
